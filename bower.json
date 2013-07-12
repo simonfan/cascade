@@ -1,0 +1,11 @@
+{
+  "name": "cascade",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "~2.0.3",
+    "buildable": "simonfan/buildable",
+    "eventemitter2": "~0.4.11",
+    "underscore-amd": "~1.5.0"
+  },
+  "main": "cascade.js"
+}
