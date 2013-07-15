@@ -6,17 +6,7 @@ function(   $   , Buildable , Eventemitter2 , undef      , undef     ) {
 		init: function(taskorder, tasks) {
 			// tasks are functions that take a promise as their first parameter 
 			// and somewhere in time solves the promise, so that another task may be run.
-			// All solved parameters are passed on to the next function in the task list.
-
-			_.bindAll(this, '_start','_complete','rerun','run','add');
-
-			this.taskorder = taskorder || [];	// a list of tasks by name
-			this.tasks = tasks || {};			// a hash where reference to tasks is saved
-
-			this.done = {};
-			this.started = {};
-			this.status = 'unstarted';
-		},
+			// All solved parameters are passed on to the next fun
 
 		reset: function() {
 			this.done = {};
