@@ -18,11 +18,12 @@ function(   $   , Buildable , Eventemitter2 , undef      , undef     ) {
 
 			_.each(this.tasks, function (task, order) {
 				// create the defer object.
-				var defer = $.Deferred();
+				var defer = $.Deferred(),
+					next = defer.resolve;
 
 				// only start the new task when the previous one is finished.
 				$.when(lastdefer).then(function() {
-					task.call(context, defer, common);
+					task.call(context, next, common);
 				});
 				
 				// set the lastdefer to be the currente defet.
@@ -48,6 +49,8 @@ function(   $   , Buildable , Eventemitter2 , undef      , undef     ) {
 			var args = _.args(arguments, 1);
 			return cascade[ method ].apply(this, args);
 		},
+
+		add: cascade.add,
 
 		run: cascade.run,
 	})
