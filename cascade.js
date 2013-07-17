@@ -17,7 +17,17 @@ function(   $   , Buildable , undef      , undef     ) {
 			var lastdefer = true;
 
 			_.each(this.tasks, function (task, order) {
-
+				/*
+					This code is pretty tricky:
+					1: lastdefer starts as true, so that the first task is instantly run.
+					2: lsatdefer value is updated at each task loop.
+					3: 'when' lastdefer is resolved, a function creates a new defer
+						and passes it to the next task. 
+					4: if the next task returns a not undefined object, it is set as 
+						the 'lastdefer'. This is done so that tasks may return a promise instead 
+						of calling next function.
+				*/
+				
 				// only start the new task when the previous one is finished.
 				lastdefer = $.when(lastdefer).then(function() {
 					// create the defer object.
