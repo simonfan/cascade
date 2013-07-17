@@ -1,5 +1,5 @@
-define(['jquery','buildable','eventemitter2','underscore', '_.mixins'],
-function(   $   , Buildable , Eventemitter2 , undef      , undef     ) {
+define(['jquery','buildable','underscore', '_.mixins'],
+function(   $   , Buildable , undef      , undef     ) {
 
 	// internal methods
 	var cascade = {
@@ -17,17 +17,16 @@ function(   $   , Buildable , Eventemitter2 , undef      , undef     ) {
 			var lastdefer = true;
 
 			_.each(this.tasks, function (task, order) {
-				// create the defer object.
-				var defer = $.Deferred(),
-					next = defer.resolve;
 
 				// only start the new task when the previous one is finished.
-				$.when(lastdefer).then(function() {
-					task.call(context, next, common);
+				lastdefer = $.when(lastdefer).then(function() {
+					// create the defer object.
+					var defer = $.Deferred(),
+						next = defer.resolve,
+						res = task.call(context, next, common);
+
+					return typeof res !== 'undefined' ? res : defer;
 				});
-				
-				// set the lastdefer to be the currente defet.
-				lastdefer = defer;
 			});
 
 			// return a defer object.
@@ -36,7 +35,7 @@ function(   $   , Buildable , Eventemitter2 , undef      , undef     ) {
 	};
 
 	var Cascade = Object.create(Buildable);
-	Cascade.extend(Eventemitter2.prototype, {
+	Cascade.extend({
 		init: function(tasks) {
 			// bnd the cascade method
 			_.bindAll(this,'cascade');
